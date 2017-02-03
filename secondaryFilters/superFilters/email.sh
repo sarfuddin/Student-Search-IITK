@@ -6,7 +6,7 @@ superEmail() {
     while read line
     do
         year="${line:0:2}"
-        if [ "$year" -eq "$year" ] 2>/dev/null; then
+        if [ "$line" -eq "$line" ] 2>/dev/null; then
             :
         else
             echo "error: Not a Number" >> "temp/tempStor"
@@ -14,21 +14,12 @@ superEmail() {
         fi
         cd "${scriptPath}/data/Students"
             cd "Y${year}"
-                for program in "${programs[@]}"
-                do
-                    cd "${program}"
-                        Line=`grep -Pn "${line}" RollNo | cut -d: -f1`
-                        if [ "$Line" = ""  ]; then
-                            cd ..
-                            continue
-                        fi
-                        EID=`head -${Line} EmailID | tail -1`
-                        #lower case search
-                        if [[ "${EID,,}" = *"${email,,}"*  ]]; then
-                            echo "${line}" >> "../../../../temp/tempStor"
-                        fi
-                    cd ..
-                done
+                cd "${line}"
+                    EID=`cat EmailID`
+                    if [[ "${EID,,}" = "${email,,}"* ]]; then
+                        echo "${line}" >> "../../../../temp/tempStor"
+                    fi
+                cd ..
             cd ..
         cd ../..
     done < "temp/$1"
